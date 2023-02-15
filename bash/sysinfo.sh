@@ -2,20 +2,20 @@
 fqdn=$( hostname --fqdn ) 
 
 #To assign the OS details on the system
-os=$( hostnamectl|grep Operating )
+operating_system=$( hostnamectl|grep Operating )
 
 #To assign the IP address
-IP=$( hostname -I )
+ip_address=$( hostname -I )
 
 #To assign the free storage file of system
 
-root=$( df --output=avail --block-size=G / | awk 'NR==2 {print $1}' )
+space=$( df --output=avail --block-size=G / | awk 'NR==2 {print $1}' )
 cat<<EOF
 Details for $fqdn
 ###########################
 Fully Qualified Domain Name: $fqdn
-Operation system and version info: $os
-IP address: $IP
-Root file free storage: $root
+Operation system info: $operating_system
+IP address: $ip_address
+Root file free storage: $space
 ##########################
 EOF
