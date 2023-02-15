@@ -1,20 +1,21 @@
 #!/bin/bash
+fqdn=$( hostname --fqdn ) 
 
-#To display FQDN
+#To assign the OS details on the system
+os=$( hostnamectl|grep Operating )
 
-echo "Domain name: $(hostname -f)"
+#To assign the IP address
+IP=$( hostname -I )
 
+#To assign the free storage file of system
 
-#To display os name and version
-
-echo "Host Information:" 
-hostnamectl
-
-#To display IP addresses that are not on the 127 network
-
-echo "IP Addresses:$(ip addr | grep -v "127" | grep -Eo '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' | tr '\n' ' ')"
-
-#To display the space available in only the root filesystem
-
-echo "Space available: $(df -h / | tail -1 | awk '{print $4}')"
-
+root=$( df --output=avail --block-size=G / | awk 'NR==2 {print $1}' )
+cat<<EOF
+Details for $fqdn
+###########################
+Fully Qualified Domain Name: $fqdn
+Operation system and version info: $os
+IP address: $IP
+Root file free storage: $root
+##########################
+EOF
