@@ -1,21 +1,32 @@
 #!/bin/bash
-fqdn=$( hostname --fqdn ) 
+#system information of this device.
 
-#To assign the OS details on the system
-operating_system=$( hostnamectl|grep Operating )
+#It will store the hostname of the device.
+hostname=$(hostname)
 
-#To assign the IP address
-ip_address=$( hostname -I )
+# It will store domain name if it have one.
+domain=$(dnsdomainname)
 
-#To assign the free storage file of system
 
-space=$( df --output=avail --block-size=G / | awk 'NR==2 {print $1}' )
-cat<<EOF
-Details for $fqdn
-###########################
-Fully Qualified Domain Name: $fqdn
-Operation system info: $operating_system
-IP address: $ip_address
-Root file free storage: $space
-##########################
+#It will store the name of operating system and their version.
+operating_system=$(lsb_release -d -s)
+
+
+#It will store ip address of the device.
+ip_address=$(ip a s ens33 | grep -w inet | awk '{print $2}')
+
+
+#Showing the free space available in root filesystem.
+freespace=$(df -h /dev/sda3 | tail -1 | awk '{print $4}')
+
+
+#display the result.
+cat <<EOF
+ Report for $hostname
+ ======================================================================
+ FQDN: $domain
+ Operating System name and version: $operating_system
+ IP Address: $ip_address
+ Root Filesystem Free Space: $freespace
+ ======================================================================
 EOF
